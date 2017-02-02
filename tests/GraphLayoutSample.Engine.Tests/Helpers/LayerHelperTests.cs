@@ -34,6 +34,7 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             for (var i = 0; i < chain.Count; ++i)
             {
                 Assert.AreEqual(i, chain[i].Layer);
+                Assert.AreEqual(i, chain[i].CoLayer);
             }
         }
 
@@ -58,6 +59,11 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             Assert.AreEqual(1, rhombus[1].Layer);
             Assert.AreEqual(1, rhombus[1].Layer);
             Assert.AreEqual(2, rhombus[3].Layer);
+
+            Assert.AreEqual(0, rhombus[0].CoLayer);
+            Assert.AreEqual(1, rhombus[1].CoLayer);
+            Assert.AreEqual(1, rhombus[1].CoLayer);
+            Assert.AreEqual(2, rhombus[3].CoLayer);
         }
     }
 }

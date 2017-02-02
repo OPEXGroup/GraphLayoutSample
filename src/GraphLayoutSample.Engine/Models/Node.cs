@@ -16,7 +16,7 @@ namespace GraphLayoutSample.Engine.Models
         public Position Position { get; set; } = new Position();
 
         public int Layer { get; set; }
-
+        public int CoLayer { get; set; }
 
     }
 }

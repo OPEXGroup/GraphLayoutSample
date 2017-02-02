@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GraphLayoutSample.Engine.Enums;
 using GraphLayoutSample.Engine.Models;
@@ -11,6 +12,7 @@ namespace GraphLayoutSample.Engine.Helpers
     {
         public static List<Node> GenerateRandomGraph(RandomGraphSettings settings)
         {
+            // ToDo check settings
             var graph = new List<Node>();
 
             for (var i = 0; i < settings.NodeCount; ++i)
@@ -22,7 +24,29 @@ namespace GraphLayoutSample.Engine.Helpers
                 });
             }
 
-            while (!TrySetConnections(graph, settings)) { }
+            var startNode = graph.GetRandomElement();
+            startNode.Layer = 0;
+
+            foreach (var node in graph.Except(new [] {startNode}))
+            {
+                node.Layer = Random.Next(1, settings.LayerCount);
+            }
+
+            BalanceLayers(graph, settings);
+                
+            for (var i = 0; i < settings.LayerCount - 1; ++i)
+            {
+                var layer = graph.Where(n => n.Layer == i).ToList();
+                var nextLayer = graph.Where(n => n.Layer == i + 1).ToList();
+                foreach (var node in layer)
+                {
+                    var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1);
+                    for (var j = 0; j < nextNodeCount; ++j)
+                    {
+                        node.NextNodes.Add(nextLayer.GetRandomElement());
+                    }
+                }
+            }
 
             SetPreviousNodes(graph);
             AdjustHeights(graph, settings);
@@ -48,21 +72,26 @@ namespace GraphLayoutSample.Engine.Helpers
             return false;
         }
 
-        private static bool TrySetConnections(List<Node> nodes, RandomGraphSettings settings)
+        private static void BalanceLayers(IReadOnlyCollection<Node> graph, RandomGraphSettings settings)
         {
-            ResetConnections(nodes);
+            var emptyLayers = Enumerable
+                .Range(1, settings.LayerCount)
+                .Where(layer => graph.All(n => n.Layer != layer))
+                .ToList();
 
-            foreach (var node in nodes)
+            Debug.WriteLine(string.Join(", ", emptyLayers.Select(l => l.ToString())));
+            foreach (var emptyLayer in emptyLayers)
             {
-                var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree);
+                var largeLayers = Enumerable
+                    .Range(1, settings.LayerCount)
+                    .Where(layer => graph.Count(n => n.Layer == layer) > 1)
+                    .ToList();
+                if (!largeLayers.Any())
+                    break;
 
-                for (var i = 0; i < nextNodeCount; ++i)
-                {
-                    node.NextNodes.Add(nodes.GetRandomElement());
-                }
+                var donorLayer = largeLayers.GetRandomElement();
+                graph.First(n => n.Layer == donorLayer).Layer = emptyLayer;
             }
-
-            return !HasCycles(nodes);
         }
 
         private static bool NodeIsCycleStart(GraphNode node)
@@ -126,7 +155,7 @@ namespace GraphLayoutSample.Engine.Helpers
             }
         }
 
-        private static T GetRandomElement<T>(this IList<T> list) => list[Random.Next(list.Count - 1)];
+        private static T GetRandomElement<T>(this IList<T> list) => list[Random.Next(list.Count)];
 
         private static double NextDouble(double min, double max) => min + (max - min) * Random.NextDouble();
 

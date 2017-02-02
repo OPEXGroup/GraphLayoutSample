@@ -5,6 +5,7 @@
         #region properties
 
         public int NodeCount { get; set; } = DefaultNodeCount;
+        public int LayerCount { get; set; } = DefaultLayerCount;
 
         public int MinNodeDegree { get; set; } = DefaultMinNodeDegree;
         public int MaxNodeDegree { get; set; } = DefaultMaxNodeDegree;
@@ -24,6 +25,7 @@
         #region constants
 
         private const int DefaultNodeCount = 15;
+        private const int DefaultLayerCount = 7;
 
         private const int DefaultMinNodeDegree = 1;
         private const int DefaultMaxNodeDegree = 5;
@@ -34,7 +36,7 @@
         private const double DefaultMinNodeHeight = 50;
         private const double DefaultMaxNodeHeight = 100;
 
-        public const double DefaultDegreeHeightBonus = 15;
+        private const double DefaultDegreeHeightBonus = 15;
 
         #endregion
     }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphLayoutSample.Engine.Helpers;
 using GraphLayoutSample.Engine.Models;
+using GraphLayoutSample.Engine.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GraphLayoutSample.Engine.Tests.Helpers
@@ -75,6 +77,33 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             cycle[3].NextNodes = new List<Node> { cycle[0] };
 
             Assert.AreEqual(true, GraphHelper.HasCycles(cycle));
+        }
+
+        [TestMethod]
+        public void GenerateRandomGraph_GeneratesAcyclcGraph()
+        {
+            var settings = new RandomGraphSettings();
+            var graph = GraphHelper.GenerateRandomGraph(settings);
+
+            Assert.AreEqual(false, GraphHelper.HasCycles(graph));
+        }
+
+        [TestMethod]
+        public void GenerateRandomGraph_GeneratesChainIfNodeCountEqualsLayerCount()
+        {
+            var settings = new RandomGraphSettings
+            {
+                NodeCount = 10,
+                LayerCount = 10
+            };
+
+            var graph = GraphHelper.GenerateRandomGraph(settings);
+            var orderedGraph = graph.OrderBy(n => n.Layer).ToList();
+
+            for (var i = 0; i < settings.NodeCount; ++i)
+            {
+                Assert.AreEqual(i, orderedGraph[i].Layer);
+            }
         }
     }
 }
