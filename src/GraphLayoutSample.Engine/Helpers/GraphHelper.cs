@@ -27,13 +27,13 @@ namespace GraphLayoutSample.Engine.Helpers
             var startNode = graph.GetRandomElement();
             startNode.Layer = 0;
 
-            foreach (var node in graph.Except(new [] {startNode}))
+            foreach (var node in graph.Except(new[] { startNode }))
             {
                 node.Layer = Random.Next(1, settings.LayerCount);
             }
 
             BalanceLayers(graph, settings);
-                
+
             for (var i = 0; i < settings.LayerCount - 1; ++i)
             {
                 var layer = graph.Where(n => n.Layer == i).ToList();
@@ -57,7 +57,7 @@ namespace GraphLayoutSample.Engine.Helpers
 
         public static bool HasCycles(List<Node> nodes)
         {
-            if (! nodes.Any())
+            if (!nodes.Any())
                 return false;
 
             var graph = BuildGraph(nodes);
@@ -79,19 +79,19 @@ namespace GraphLayoutSample.Engine.Helpers
                 .Where(layer => graph.All(n => n.Layer != layer))
                 .ToList();
 
-            Debug.WriteLine(string.Join(", ", emptyLayers.Select(l => l.ToString())));
             foreach (var emptyLayer in emptyLayers)
             {
                 var largeLayers = Enumerable
                     .Range(1, settings.LayerCount)
                     .Where(layer => graph.Count(n => n.Layer == layer) > 1)
                     .ToList();
-                if (!largeLayers.Any())
-                    break;
+                if (! largeLayers.Any())
+                    continue;
 
                 var donorLayer = largeLayers.GetRandomElement();
                 graph.First(n => n.Layer == donorLayer).Layer = emptyLayer;
             }
+
         }
 
         private static bool NodeIsCycleStart(GraphNode node)
