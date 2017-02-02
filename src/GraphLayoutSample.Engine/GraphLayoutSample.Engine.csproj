@@ -40,7 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\NodeColor.cs" />
+    <Compile Include="Helpers\GraphHelper.cs" />
+    <Compile Include="Helpers\LayerHelper.cs" />
+    <Compile Include="Models\GraphNode.cs" />
+    <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
