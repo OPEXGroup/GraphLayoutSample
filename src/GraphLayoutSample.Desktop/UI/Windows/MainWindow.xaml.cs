@@ -74,20 +74,7 @@ namespace GraphLayoutSample.Desktop
             var secondNodeRectangle = GetNodeRectange(secondNode);
         }
 
-        private Rectangle GetNodeRectange(Node node)
-        {
-            foreach (var child in GraphCanvas.Children)
-            {
-                var rectangle = child as Rectangle;
-                if (rectangle == null)
-                    continue;
-
-                if (rectangle.Tag == node)
-                    return rectangle;
-            }
-
-            return null;
-        }
+        private Rectangle GetNodeRectange(Node node)=> GraphCanvas.Children.OfType<Rectangle>().FirstOrDefault(rectangle => rectangle.Tag == node);
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
