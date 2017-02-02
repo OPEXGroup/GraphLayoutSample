@@ -6,15 +6,19 @@ namespace GraphLayoutSample.Engine.Helpers
 {
     public static class LayerHelper
     {
-        public static bool SetLayers(List<Node> nodes)
+        public static void SetLayers(List<Node> nodes)
         {
             if (!nodes.Any())
-                return true;
+                return;
 
             var notProcessedNodes = new List<Node>(nodes);
             var processedNodes = new List<Node>();
 
-            var startNodes = nodes.Where(n => !n.PreviousNodes.Any());
+            var startNodes = nodes.Where(n => !nodes.Any(nn => nn.NextNodes.Contains(n))).ToList();
+            foreach (var node in startNodes)
+            {
+                node.Layer = 0;
+            }
             notProcessedNodes.RemoveAll(n => startNodes.Contains(n));
             processedNodes.AddRange(startNodes);
 
@@ -22,7 +26,8 @@ namespace GraphLayoutSample.Engine.Helpers
             while (notProcessedNodes.Any())
             {
                 var nextLayerNodes = notProcessedNodes
-                    .Where(n => processedNodes.Any(pn => pn.NextNodes.Contains(n)));
+                    .Where(n => processedNodes.Any(pn => pn.NextNodes.Contains(n)))
+                    .ToList();
                 foreach (var node in nextLayerNodes)
                 {
                     node.Layer = currentLayer;
@@ -32,8 +37,6 @@ namespace GraphLayoutSample.Engine.Helpers
 
                 currentLayer++;
             }
-
-            return true;
         }
     }
 }
