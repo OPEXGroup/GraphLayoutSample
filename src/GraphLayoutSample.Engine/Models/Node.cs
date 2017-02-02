@@ -14,6 +14,7 @@ namespace GraphLayoutSample.Engine.Models
 
         public List<Node> NextNodes { get; set; } = new List<Node>();
         public List<Node> PreviousNodes { get; set; } = new List<Node>();
+        public int Degree => NextNodes?.Count ?? -1;
 
         public Position Position { get; set; } = new Position();
 

@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GraphLayoutSample.Engine.Enums;
 using GraphLayoutSample.Engine.Models;
@@ -28,7 +29,8 @@ namespace GraphLayoutSample.Engine.Helpers
             var startNode = graph.GetRandomElement();
             startNode.Layer = 0;
 
-            foreach (var node in graph.Except(new[] { startNode }))
+            var nonStartNodes = graph.Except(new[] {startNode}).ToList();
+            foreach (var node in nonStartNodes)
             {
                 node.Layer = Random.Next(1, settings.LayerCount);
             }
@@ -43,7 +45,7 @@ namespace GraphLayoutSample.Engine.Helpers
                 foreach (var node in layer)
                 {
                     var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1);
-                    var nextLayerNodes = prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
+                    var nextLayerNodes = nextNodeCount;//prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
 
                     for (var j = 0; j < nextLayerNodes; ++j)
                     {
@@ -67,6 +69,11 @@ namespace GraphLayoutSample.Engine.Helpers
                         node.NextNodes.Add(nextLayer.GetRandomElement());
                     }
                 }
+            }
+
+            foreach (var node in graph)
+            {
+                Debug.WriteLine($"{node.Guid}: {node.Layer} {node.Degree}");
             }
 
             SetPreviousNodes(graph);

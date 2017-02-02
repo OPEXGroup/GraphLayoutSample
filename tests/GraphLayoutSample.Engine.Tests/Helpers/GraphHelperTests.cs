@@ -122,12 +122,12 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             var graph = GraphHelper.GenerateRandomGraph(settings);
 
             var distinctLayersCount = graph.Select(n => n.Layer).Distinct().Count();
-            var minNodeDegree = graph.Min(n => n.NextNodes.Count);
+            var minNodeDegree = graph.Where(n => n.Layer < distinctLayersCount - 1).Min(n => n.NextNodes.Count);
             var maxNodeDegree = graph.Max(n => n.NextNodes.Count);
 
             Assert.AreEqual(settings.LayerCount, distinctLayersCount);
-            Assert.IsTrue(minNodeDegree >= settings.MinNodeDegree);
-            Assert.IsTrue(maxNodeDegree <= settings.MaxNodeDegree);
+            Assert.IsTrue(minNodeDegree >= settings.MinNodeDegree, $"{minNodeDegree} >= {settings.MinNodeDegree}");
+            Assert.IsTrue(maxNodeDegree <= settings.MaxNodeDegree, $"{maxNodeDegree} >= {settings.MaxNodeDegree}");
         }
     }
 }
