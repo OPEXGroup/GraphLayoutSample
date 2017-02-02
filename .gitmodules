@@ -1,0 +1,3 @@
+[submodule "lib/ITCC.Library"]
+	path = lib/ITCC.Library
+	url = git@github.com:OPEXGroup/ITCC.Library.git
