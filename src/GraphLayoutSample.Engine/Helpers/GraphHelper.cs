@@ -39,10 +39,30 @@ namespace GraphLayoutSample.Engine.Helpers
             {
                 var layer = graph.Where(n => n.Layer == i).ToList();
                 var nextLayer = graph.Where(n => n.Layer == i + 1).ToList();
+                var prevLayers = graph.Where(n => n.Layer <= i && n.Layer > 0).ToList();
                 foreach (var node in layer)
                 {
                     var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1);
-                    for (var j = 0; j < nextNodeCount; ++j)
+                    var nextLayerNodes = prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
+
+                    for (var j = 0; j < nextLayerNodes; ++j)
+                    {
+                        node.NextNodes.Add(nextLayer.GetRandomElement());
+                    }
+
+                    var prevNodes = nextNodeCount - nextLayerNodes;
+                    var prevNodesConnected = 0;
+                    var attempts = 0;
+                    while (prevNodesConnected < prevNodes && attempts < 10 * prevNodes)
+                    {
+                        var prevNode = prevLayers.GetRandomElement();
+                        if (TryAddBackConnection(node, prevNode, graph))
+                            prevNodesConnected++;
+
+                        attempts++;
+                    }
+
+                    for (var j = 0; j < prevNodes - prevNodesConnected; ++j)
                     {
                         node.NextNodes.Add(nextLayer.GetRandomElement());
                     }
@@ -54,6 +74,18 @@ namespace GraphLayoutSample.Engine.Helpers
             LayerHelper.SetLayers(graph);
 
             return graph;
+        }
+
+        private static bool TryAddBackConnection(Node firstNode, Node secondNode, List<Node> graph)
+        {
+            firstNode.NextNodes.Add(secondNode);
+            if (HasCycles(graph))
+            {
+                firstNode.NextNodes.Remove(secondNode);
+                return false;
+            }
+
+            return true;
         }
 
         public static bool HasCycles(List<Node> nodes)
