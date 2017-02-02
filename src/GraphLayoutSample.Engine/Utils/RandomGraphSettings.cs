@@ -14,6 +14,11 @@
 
         public double MinNodeHeight { get; set; } = DefaultMinNodeHeight;
         public double MaxNodeHeight { get; set; } = DefaultMaxNodeHeight;
+
+        /// <summary>
+        ///     Real height = generated height + (degree * DegreeHeightBonus)
+        /// </summary>
+        public double DegreeHeightBonus { get; set; } = DefaultDegreeHeightBonus;
         #endregion
 
         #region constants
@@ -28,6 +33,8 @@
 
         private const double DefaultMinNodeHeight = 50;
         private const double DefaultMaxNodeHeight = 100;
+
+        public const double DefaultDegreeHeightBonus = 15;
 
         #endregion
     }
