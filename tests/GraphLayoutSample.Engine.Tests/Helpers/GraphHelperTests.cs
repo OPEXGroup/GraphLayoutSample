@@ -36,5 +36,45 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
 
             Assert.AreEqual(false, GraphHelper.HasCycles(chain));
         }
+
+        [TestMethod]
+        public void HasCycles_ReturnsFalseOnTree()
+        {
+            var tree = new List<Node>
+            {
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node()
+            };
+
+            tree[0].NextNodes = new List<Node> { tree[1], tree[2] };
+            tree[1].NextNodes = new List<Node> { tree[3], tree[5] };
+            tree[2].NextNodes = new List<Node> { tree[4], tree[6] };
+
+            Assert.AreEqual(false, GraphHelper.HasCycles(tree));
+        }
+
+        [TestMethod]
+        public void HasCycles_ReturnsTrueOnCycle()
+        {
+            var cycle = new List<Node>
+            {
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node()
+            };
+
+            cycle[0].NextNodes = new List<Node> { cycle[1] };
+            cycle[1].NextNodes = new List<Node> { cycle[2] };
+            cycle[2].NextNodes = new List<Node> { cycle[3] };
+            cycle[3].NextNodes = new List<Node> { cycle[0] };
+
+            Assert.AreEqual(true, GraphHelper.HasCycles(cycle));
+        }
     }
 }
