@@ -1,7 +1,6 @@
 ﻿using GraphLayoutSample.Engine.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,7 +38,7 @@ namespace GraphLayoutSample.Desktop
 
             foreach (var node in graph)
             {
-                var rectange = new Rectangle
+                var rectangle = new Rectangle
                 {
                     Width = node.Width,
                     Height = node.Height,
@@ -48,10 +47,10 @@ namespace GraphLayoutSample.Desktop
                     Tag = node
                 };
 
-                Canvas.SetLeft(rectange, node.Position.X);
-                Canvas.SetTop(rectange, node.Position.Y);
+                Canvas.SetLeft(rectangle, node.Position.X);
+                Canvas.SetTop(rectangle, node.Position.Y);
 
-                GraphCanvas.Children.Add(rectange);
+                GraphCanvas.Children.Add(rectangle);
             }
 
             foreach (var node in graph)
@@ -70,11 +69,19 @@ namespace GraphLayoutSample.Desktop
 
         private void ConnectNodes(Node firstNode, Node secondNode)
         {
-            var firstNodeRectangle = GetNodeRectange(firstNode);
-            var secondNodeRectangle = GetNodeRectange(secondNode);
-        }
+            var line = new Line
+            {
+                Stroke = Brushes.LightSteelBlue,
+                StrokeThickness = 2,
+                X1 = firstNode.Position.X + firstNode.Width,
+                X2 = secondNode.Position.X,
+                Y1 = firstNode.Position.Y + firstNode.Height / 2,
+                Y2 = secondNode.Position.Y + secondNode.Height / 2
+            };
 
-        private Rectangle GetNodeRectange(Node node)=> GraphCanvas.Children.OfType<Rectangle>().FirstOrDefault(rectangle => rectangle.Tag == node);
+
+            GraphCanvas.Children.Add(line);
+        }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
