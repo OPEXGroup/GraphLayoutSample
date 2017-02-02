@@ -44,7 +44,8 @@ namespace GraphLayoutSample.Desktop
                     Width = node.Width,
                     Height = node.Height,
                     Stroke = Brushes.LightBlue,
-                    StrokeThickness = 2
+                    StrokeThickness = 2,
+                    Tag = node
                 };
 
                 Canvas.SetLeft(rectange, node.Position.X);
@@ -52,6 +53,40 @@ namespace GraphLayoutSample.Desktop
 
                 GraphCanvas.Children.Add(rectange);
             }
+
+            foreach (var node in graph)
+            {
+                SetConnectionsForNode(node);
+            }
+        }
+
+        private void SetConnectionsForNode(Node node)
+        {
+            foreach (var nextNode in node.NextNodes)
+            {
+                ConnectNodes(node, nextNode);
+            }
+        }
+
+        private void ConnectNodes(Node firstNode, Node secondNode)
+        {
+            var firstNodeRectangle = GetNodeRectange(firstNode);
+            var secondNodeRectangle = GetNodeRectange(secondNode);
+        }
+
+        private Rectangle GetNodeRectange(Node node)
+        {
+            foreach (var child in GraphCanvas.Children)
+            {
+                var rectangle = child as Rectangle;
+                if (rectangle == null)
+                    continue;
+
+                if (rectangle.Tag == node)
+                    return rectangle;
+            }
+
+            return null;
         }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
