@@ -24,19 +24,34 @@ namespace GraphLayoutSample.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RandomGraphSettings _settings = new RandomGraphSettings();
+        private readonly RandomGraphSettings _settings = new RandomGraphSettings();
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void Clean() => GraphGrid.Children.Clear();
+        private void Clean() => GraphCanvas.Children.Clear();
 
         private void Draw(List<Node> graph)
         {
             Clean();
 
+            foreach (var node in graph)
+            {
+                var rectange = new Rectangle
+                {
+                    Width = node.Width,
+                    Height = node.Height,
+                    Stroke = Brushes.LightBlue,
+                    StrokeThickness = 2
+                };
+
+                Canvas.SetLeft(rectange, node.Position.X);
+                Canvas.SetTop(rectange, node.Position.Y);
+
+                GraphCanvas.Children.Add(rectange);
+            }
         }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
@@ -48,8 +63,8 @@ namespace GraphLayoutSample.Desktop
         {
             var graph = GraphHelper.GenerateRandomGraph(_settings);
 
-            var layoutBuilder = new RandomLayoutBuilder(DrawGrid.Width, DrawGrid.Height, DrawGrid.Margin.Left);
-            DrawGrid.Width = layoutBuilder.SetPositions(graph);
+            var layoutBuilder = new RandomLayoutBuilder(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight, 10);
+            GraphCanvas.Width = layoutBuilder.SetPositions(graph);
 
             Draw(graph);
         }

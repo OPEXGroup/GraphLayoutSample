@@ -68,6 +68,7 @@ namespace GraphLayoutSample.Desktop
             Logger.RegisterReceiver(fileLogger);
 
             _observableLogger = new ObservableLogger(1000, RunOnUiThreadAsync);
+            Logger.RegisterReceiver(_observableLogger);
 
             Logger.RegisterReceiver(new DebugLogger());
         }

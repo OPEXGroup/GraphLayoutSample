@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GraphLayoutSample.Desktop"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="1000" Width="1200">
+        Height="600" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
@@ -39,9 +39,11 @@
             <ScrollViewer Name="DrawScrollViewer"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
-                <Grid Name="GraphGrid">
+                <Canvas Name="GraphCanvas"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
                     
-                </Grid>
+                </Canvas>
             </ScrollViewer>
         </Grid>
     </Grid>
