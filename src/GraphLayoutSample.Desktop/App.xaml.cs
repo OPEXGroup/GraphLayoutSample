@@ -1,4 +1,6 @@
-﻿using System;
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +17,7 @@ namespace GraphLayoutSample.Desktop
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, IDisposable
     {
         public static Window GetMainWindow() => Current.Windows.OfType<MainWindow>().First();
 
@@ -80,5 +82,7 @@ namespace GraphLayoutSample.Desktop
         public static void LogException(LogLevel level, Exception exception) => Logger.LogException("APPLICATION", level, exception);
 
         #endregion
+
+        public void Dispose() => _observableLogger?.Dispose();
     }
 }
