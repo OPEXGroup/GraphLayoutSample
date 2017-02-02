@@ -107,5 +107,27 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
                 Assert.AreEqual(i, orderedGraph[i].Layer);
             }
         }
+
+        [TestMethod]
+        public void GenerateRandomGraph_GeneratesGraphsWithCorrectParams()
+        {
+            var settings = new RandomGraphSettings
+            {
+                NodeCount = 10,
+                LayerCount = 4,
+                MaxNodeDegree = 10,
+                MinNodeDegree = 2
+            };
+
+            var graph = GraphHelper.GenerateRandomGraph(settings);
+
+            var distinctLayersCount = graph.Select(n => n.Layer).Distinct().Count();
+            var minNodeDegree = graph.Min(n => n.NextNodes.Count);
+            var maxNodeDegree = graph.Max(n => n.NextNodes.Count);
+
+            Assert.AreEqual(settings.LayerCount, distinctLayersCount);
+            Assert.IsTrue(minNodeDegree >= settings.MinNodeDegree);
+            Assert.IsTrue(maxNodeDegree <= settings.MaxNodeDegree);
+        }
     }
 }
