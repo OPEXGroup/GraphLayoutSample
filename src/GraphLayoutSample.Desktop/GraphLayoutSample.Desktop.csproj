@@ -112,6 +112,10 @@
       <Project>{07d36841-8876-437c-b7a4-cbf1012513eb}</Project>
       <Name>ITCC.WPF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GraphLayoutSample.Engine\GraphLayoutSample.Engine.csproj">
+      <Project>{b92a24a6-2dd1-4bb4-a12a-5878e006e078}</Project>
+      <Name>GraphLayoutSample.Engine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
