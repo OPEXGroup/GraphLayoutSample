@@ -179,15 +179,6 @@ namespace GraphLayoutSample.Engine.Helpers
             }
         }
 
-        private static void ResetConnections(IEnumerable<Node> nodes)
-        {
-            foreach (var node in nodes)
-            {
-                node.NextNodes = new List<Node>();
-                node.PreviousNodes = new List<Node>();
-            }
-        }
-
         private static T GetRandomElement<T>(this IList<T> list) => list[Random.Next(list.Count)];
 
         private static double NextDouble(double min, double max) => min + (max - min) * Random.NextDouble();
