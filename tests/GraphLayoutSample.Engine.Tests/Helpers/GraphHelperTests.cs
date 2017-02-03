@@ -115,7 +115,7 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             {
                 NodeCount = 10,
                 LayerCount = 4,
-                MaxNodeDegree = 10,
+                MaxNodeDegree = 5,
                 MinNodeDegree = 2
             };
 

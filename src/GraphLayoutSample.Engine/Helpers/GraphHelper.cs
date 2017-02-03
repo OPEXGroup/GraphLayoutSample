@@ -26,6 +26,7 @@ namespace GraphLayoutSample.Engine.Helpers
             }
 
             SetNodesLayers(graph, settings);
+            PrintDebugInfo(graph);
 
             for (var i = 0; i < settings.LayerCount - 1; ++i)
             {
@@ -34,8 +35,8 @@ namespace GraphLayoutSample.Engine.Helpers
                 var prevLayers = graph.Where(n => n.Layer <= i && n.Layer > 0).ToList();
                 foreach (var node in layer)
                 {
-                    var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1);
-                    var nextLayerNodes = nextNodeCount;//prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
+                    var nextNodeCount = Math.Max(Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1), nextLayer.Count);
+                    var nextLayerNodes = prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
 
                     for (var j = 0; j < nextLayerNodes; ++j)
                     {
@@ -61,13 +62,41 @@ namespace GraphLayoutSample.Engine.Helpers
                 }
             }
 
+            EnsureGraphIsConnected(graph);
+            PrintDebugInfo(graph);
+
             SetPreviousNodes(graph);
             AdjustHeights(graph, settings);
             LayerHelper.SetLayers(graph);
-            PrintLayersCount(graph);
-            PrintNodeDegrees(graph);
+            PrintDebugInfo(graph);
 
             return graph;
+        }
+
+        private static void EnsureGraphIsConnected(IReadOnlyCollection<Node> graph)
+        {
+            var layerCount = graph.Select(n => n.Layer).Distinct().Count();
+            for (var i = 1; i < layerCount; ++i)
+            {
+                var prevLayer = graph.Where(n => n.Layer == i - 1).ToList();
+                var currentLayer = graph.Where(n => n.Layer == i).ToList();
+
+                var notConnectedNodes = currentLayer.Where(n => !prevLayer.Any(pln => pln.NextNodes.Contains(n)));
+                foreach (var notConnectedNode in notConnectedNodes)
+                {
+                    foreach (var node in prevLayer.Where(p => p.Degree > 1).Shuffle(Random))
+                    {
+                        var redundantConnection = node.NextNodes
+                            .FirstOrDefault(n => n.GetInputDegree(prevLayer) > 1);
+                        if (redundantConnection == null)
+                            continue;
+
+                        node.NextNodes.Remove(redundantConnection);
+                        node.NextNodes.Add(notConnectedNode);
+                        break;
+                    }
+                }
+            }
         }
 
         private static void SetNodesLayers(List<Node> graph, RandomGraphSettings settings)
@@ -130,9 +159,6 @@ namespace GraphLayoutSample.Engine.Helpers
                 var donorLayer = largeLayers.GetRandomElement();
                 graph.First(n => n.Layer == donorLayer).Layer = emptyLayer;
             }
-
-            PrintLayersCount(graph);
-            PrintNodeDegrees(graph);
         }
 
         private static bool NodeIsCycleStart(GraphNode node)
@@ -193,6 +219,17 @@ namespace GraphLayoutSample.Engine.Helpers
 
         private static readonly Random Random = new Random();
 
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random random)
+        {
+            var elements = source.ToArray();
+            for (var i = elements.Length - 1; i >= 0; i--)
+            {
+                var swapIndex = random.Next(i + 1);
+                yield return elements[swapIndex];
+                elements[swapIndex] = elements[i];
+            }
+        }
+
         #region DEBUG
 
         [Conditional("DEBUG")]
@@ -204,13 +241,24 @@ namespace GraphLayoutSample.Engine.Helpers
             }
         }
 
-        private static void PrintNodeDegrees(IEnumerable<Node> graph)
+        private static int GetInputDegree(this Node node, IEnumerable<Node> graph)
+        {
+            return graph.SelectMany(n => n.NextNodes.Where(nn => nn == node)).Count();
+        }
+
+        private static void PrintNodeDegrees(IReadOnlyCollection<Node> graph)
         {
             var orderedGraph = graph.OrderBy(n => n.Layer);
             foreach (var node in orderedGraph)
             {
-                Debug.WriteLine($"Node {node.Guid}: layer {node.Layer}, degree {node.Degree}");
+                Debug.WriteLine($"Node {node.Guid}: layer {node.Layer}, degree {node.Degree} inputDegree {node.GetInputDegree(graph)}");
             }
+        }
+
+        private static void PrintDebugInfo(IReadOnlyCollection<Node> graph)
+        {
+            PrintLayersCount(graph);
+            PrintNodeDegrees(graph);
         }
 
         #endregion
