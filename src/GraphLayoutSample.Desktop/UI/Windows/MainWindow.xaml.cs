@@ -94,7 +94,7 @@ namespace GraphLayoutSample.Desktop
         {
             var graph = GraphHelper.GenerateRandomGraph(_settings);
 
-            var layoutBuilder = new LayerLayoutBuilder();//RandomLayoutBuilder(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight, 10);
+            var layoutBuilder = new OptimalLayoutBuilder();//RandomLayoutBuilder(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight, 10);
             var newSize = layoutBuilder.SetPositions(graph,
                 new RectangleSize(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight));
             GraphCanvas.Width = newSize.Width;
@@ -102,5 +102,7 @@ namespace GraphLayoutSample.Desktop
 
             Draw(graph);
         }
+
+        private void MainWindow_OnClosed(object sender, EventArgs e) => Application.Current.Shutdown();
     }
 }

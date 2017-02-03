@@ -16,7 +16,9 @@ namespace GraphLayoutSample.Engine.Layout
             var layers = SplitGraphByLayer(nodeGraph);
             var layerCount = layers.Count;
 
-            return currentSize;
+            var height = SetAllOrderedLayersVerticalPositions(layers, margin);
+
+            return new RectangleSize(width, height);
         }
         #endregion
 
@@ -33,6 +35,18 @@ namespace GraphLayoutSample.Engine.Layout
             }
 
             return layers;
+        }
+
+        private static double SetAllOrderedLayersVerticalPositions(List<IReadOnlyList<Node>> layers, double margin)
+        {
+            var maxHeight = 0.0;
+
+            foreach (var layer in layers)
+            {
+                maxHeight = Math.Max(maxHeight, SetOrderedLayerVerticalPositions(layer, margin));
+            }
+
+            return maxHeight;
         }
 
         private static double SetOrderedLayerVerticalPositions(IReadOnlyList<Node> layer, double margin)

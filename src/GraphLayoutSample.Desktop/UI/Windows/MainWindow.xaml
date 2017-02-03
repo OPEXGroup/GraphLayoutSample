@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:GraphLayoutSample.Desktop"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="600" Width="1200">
+        Height="600"
+        Width="1200"
+        Closed="MainWindow_OnClosed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
