@@ -35,7 +35,7 @@ namespace GraphLayoutSample.Engine.Helpers
                 foreach (var node in layer)
                 {
                     var nextNodeCount = Random.Next(settings.MinNodeDegree, settings.MaxNodeDegree + 1);
-                    var nextLayerNodes = prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
+                    var nextLayerNodes = nextNodeCount;//prevLayers.Any() ? Random.Next(1, nextNodeCount + 1) : nextNodeCount;
 
                     for (var j = 0; j < nextLayerNodes; ++j)
                     {
@@ -64,6 +64,8 @@ namespace GraphLayoutSample.Engine.Helpers
             SetPreviousNodes(graph);
             AdjustHeights(graph, settings);
             LayerHelper.SetLayers(graph);
+            PrintLayersCount(graph);
+            PrintNodeDegrees(graph);
 
             return graph;
         }
@@ -124,17 +126,13 @@ namespace GraphLayoutSample.Engine.Helpers
                     .Range(1, settings.LayerCount - 1)
                     .Where(layer => graph.Count(n => n.Layer == layer) > 1)
                     .ToList();
-                if (! largeLayers.Any())
-                    continue;
 
                 var donorLayer = largeLayers.GetRandomElement();
                 graph.First(n => n.Layer == donorLayer).Layer = emptyLayer;
             }
 
-            foreach (var i in Enumerable.Range(0, settings.LayerCount))
-            {
-                Debug.WriteLine($"Layer {i}: {graph.Count(n => n.Layer == i)}");
-            }
+            PrintLayersCount(graph);
+            PrintNodeDegrees(graph);
         }
 
         private static bool NodeIsCycleStart(GraphNode node)
@@ -194,5 +192,27 @@ namespace GraphLayoutSample.Engine.Helpers
         private static double NextDouble(double min, double max) => min + (max - min) * Random.NextDouble();
 
         private static readonly Random Random = new Random();
+
+        #region DEBUG
+
+        [Conditional("DEBUG")]
+        private static void PrintLayersCount(IReadOnlyCollection<Node> graph)
+        {
+            foreach (var i in Enumerable.Range(0, graph.Select(n => n.Layer).Distinct().Count()))
+            {
+                Debug.WriteLine($"Layer {i}: {graph.Count(n => n.Layer == i)}");
+            }
+        }
+
+        private static void PrintNodeDegrees(IEnumerable<Node> graph)
+        {
+            var orderedGraph = graph.OrderBy(n => n.Layer);
+            foreach (var node in orderedGraph)
+            {
+                Debug.WriteLine($"Node {node.Guid}: layer {node.Layer}, degree {node.Degree}");
+            }
+        }
+
+        #endregion
     }
 }
