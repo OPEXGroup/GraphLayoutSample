@@ -52,5 +52,7 @@ namespace GraphLayoutSample.Engine.Helpers
                 node.CoLayer = prevNodes.Max(n => n.Layer) + 1;
             }
         }
+
+        public static int GetLayerCount(this IEnumerable<Node> graph) => graph.Select(n => n.Layer).Distinct().Count();
     }
 }

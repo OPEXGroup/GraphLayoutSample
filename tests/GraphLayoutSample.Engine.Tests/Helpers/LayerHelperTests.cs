@@ -99,5 +99,31 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             Assert.AreEqual(2, rhombus[3].CoLayer);
             Assert.AreEqual(3, rhombus[4].CoLayer);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
+        public static void GetLayerCount_ThrowsOnNullGraph() => LayerHelper.GetLayerCount(null);
+
+        [TestMethod]
+        public static void GetLayerCount_ReturnsCorrectLayerCount()
+        {
+            var rhombus = new List<Node>
+            {
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node()
+            };
+
+            rhombus[0].NextNodes = new List<Node> { rhombus[1], rhombus[2] };
+            rhombus[1].NextNodes = new List<Node> { rhombus[3] };
+            rhombus[2].NextNodes = new List<Node> { rhombus[4] };
+            rhombus[3].NextNodes = new List<Node> { rhombus[4] };
+
+            LayerHelper.SetLayers(rhombus);
+
+            Assert.AreEqual(4, rhombus.GetLayerCount());
+        }
     }
 }

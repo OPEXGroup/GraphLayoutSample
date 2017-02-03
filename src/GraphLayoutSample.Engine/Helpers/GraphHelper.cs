@@ -76,7 +76,7 @@ namespace GraphLayoutSample.Engine.Helpers
 
         private static void EnsureGraphIsConnected(IReadOnlyCollection<Node> graph)
         {
-            var layerCount = graph.Select(n => n.Layer).Distinct().Count();
+            var layerCount = graph.GetLayerCount();
             for (var i = 1; i < layerCount; ++i)
             {
                 var prevLayer = graph.Where(n => n.Layer == i - 1).ToList();
@@ -236,7 +236,7 @@ namespace GraphLayoutSample.Engine.Helpers
         [Conditional("DEBUG")]
         private static void PrintLayersCount(IReadOnlyCollection<Node> graph)
         {
-            foreach (var i in Enumerable.Range(0, graph.Select(n => n.Layer).Distinct().Count()))
+            foreach (var i in Enumerable.Range(0, graph.GetLayerCount()))
             {
                 Logger.LogTrace("GENERATOR", $"Layer {i}: {graph.Count(n => n.Layer == i)}");
             }
