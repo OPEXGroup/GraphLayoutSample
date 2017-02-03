@@ -7,7 +7,7 @@ namespace GraphLayoutSample.Engine.Models
 {
     public class Node
     {
-        public Guid Guid { get; set; } = new Guid();
+        public Guid Guid { get; set; } = Guid.NewGuid();
         
         public double Width { get; set; }
         public double Height { get; set; }
