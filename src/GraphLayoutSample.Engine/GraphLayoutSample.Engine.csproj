@@ -46,6 +46,7 @@
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Interfaces\ILayoutBuilder.cs" />
     <Compile Include="Layout\LayerLayoutBuilder.cs" />
+    <Compile Include="Layout\OptimalLayoutBuilder.cs" />
     <Compile Include="Layout\RandomLayoutBuilder.cs" />
     <Compile Include="Models\GraphNode.cs" />
     <Compile Include="Models\Node.cs" />

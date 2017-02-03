@@ -9,7 +9,7 @@ namespace GraphLayoutSample.Engine.Layout
 {
     public class LayerLayoutBuilder : ILayoutBuilder
     {
-        public double SetPositions(List<Node> nodeGraph)
+        public double SetPositions(IReadOnlyList<Node> nodeGraph, double currentWidth, double currentHeight)
         {
             var offset = 25.0;
             var margin = 25.0;

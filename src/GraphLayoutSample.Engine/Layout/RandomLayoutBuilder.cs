@@ -12,7 +12,7 @@ namespace GraphLayoutSample.Engine.Layout
     {
         #region ILayoutBuilder
 
-        public double SetPositions(List<Node> nodeGraph)
+        public double SetPositions(IReadOnlyList<Node> nodeGraph, double currentWidth, double currentHeight)
         {
             var random = new Random();
             foreach (var node in nodeGraph)
