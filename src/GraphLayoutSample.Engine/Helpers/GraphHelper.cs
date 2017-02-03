@@ -7,6 +7,7 @@ using System.Linq;
 using GraphLayoutSample.Engine.Enums;
 using GraphLayoutSample.Engine.Models;
 using GraphLayoutSample.Engine.Utils;
+using ITCC.Logging.Core;
 
 namespace GraphLayoutSample.Engine.Helpers
 {
@@ -237,7 +238,7 @@ namespace GraphLayoutSample.Engine.Helpers
         {
             foreach (var i in Enumerable.Range(0, graph.Select(n => n.Layer).Distinct().Count()))
             {
-                Debug.WriteLine($"Layer {i}: {graph.Count(n => n.Layer == i)}");
+                Logger.LogTrace("GENERATOR", $"Layer {i}: {graph.Count(n => n.Layer == i)}");
             }
         }
 
@@ -251,7 +252,7 @@ namespace GraphLayoutSample.Engine.Helpers
             var orderedGraph = graph.OrderBy(n => n.Layer);
             foreach (var node in orderedGraph)
             {
-                Debug.WriteLine($"Node {node.Guid}: layer {node.Layer}, degree {node.Degree} inputDegree {node.GetInputDegree(graph)}");
+                Logger.LogTrace("GENERATOR", $"Node {node.Guid}: layer {node.Layer}, degree {node.Degree} inputDegree {node.GetInputDegree(graph)}");
             }
         }
 

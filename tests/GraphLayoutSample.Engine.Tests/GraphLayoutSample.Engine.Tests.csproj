@@ -52,9 +52,14 @@
   <ItemGroup>
     <Compile Include="Helpers\GraphHelperTests.cs" />
     <Compile Include="Helpers\LayerHelperTests.cs" />
+    <Compile Include="Initializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\ITCC.Library\ITCC.Logging.Core\ITCC.Logging.Core.csproj">
+      <Project>{FC73DFCF-4D11-4400-BB98-5115CA2608E1}</Project>
+      <Name>ITCC.Logging.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\GraphLayoutSample.Engine\GraphLayoutSample.Engine.csproj">
       <Project>{b92a24a6-2dd1-4bb4-a12a-5878e006e078}</Project>
       <Name>GraphLayoutSample.Engine</Name>
