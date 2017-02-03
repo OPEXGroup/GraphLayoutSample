@@ -67,5 +67,37 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             Assert.AreEqual(1, rhombus[1].CoLayer);
             Assert.AreEqual(2, rhombus[3].CoLayer);
         }
+
+        [TestMethod]
+        public void LayerHelper_SetsLayersForComplexGraph()
+        {
+            var rhombus = new List<Node>
+            {
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node(),
+                new Node()
+            };
+
+            rhombus[0].NextNodes = new List<Node> { rhombus[1], rhombus[2] };
+            rhombus[1].NextNodes = new List<Node> { rhombus[3] };
+            rhombus[2].NextNodes = new List<Node> { rhombus[4] };
+            rhombus[3].NextNodes = new List<Node> { rhombus[4] };
+
+            LayerHelper.SetLayers(rhombus);
+
+            Assert.AreEqual(0, rhombus[0].Layer);
+            Assert.AreEqual(1, rhombus[1].Layer);
+            Assert.AreEqual(1, rhombus[1].Layer);
+            Assert.AreEqual(2, rhombus[3].Layer);
+            Assert.AreEqual(2, rhombus[4].Layer);
+
+            Assert.AreEqual(0, rhombus[0].CoLayer);
+            Assert.AreEqual(1, rhombus[1].CoLayer);
+            Assert.AreEqual(1, rhombus[1].CoLayer);
+            Assert.AreEqual(2, rhombus[3].CoLayer);
+            Assert.AreEqual(3, rhombus[4].CoLayer);
+        }
     }
 }
