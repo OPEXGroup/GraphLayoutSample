@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GraphLayoutSample.Engine.Helpers;
 using GraphLayoutSample.Engine.Interfaces;
 using GraphLayoutSample.Engine.Models;
 
@@ -16,18 +17,24 @@ namespace GraphLayoutSample.Engine.Layout
             var layers = SplitGraphByLayer(nodeGraph);
             var layerCount = layers.Count;
 
-            var height = SetAllOrderedLayersVerticalPositions(layers, margin);
+            var maxHeight = 0.0;
+            for (var i = 1; i < layerCount; ++i)
+            {
+                var bestPermutation = GetBestPermutation(layers[i - 1], layers[i]);
+                var newHeight = SetOrderedLayerVerticalPositions(bestPermutation, margin);
+                maxHeight = Math.Max(maxHeight, newHeight);
+            }
 
-            return new RectangleSize(width, height);
+            return new RectangleSize(width, maxHeight);
         }
         #endregion
 
         #region private
 
-        private static List<IReadOnlyList<Node>> SplitGraphByLayer(IReadOnlyList<Node> nodeGraph)
+        private static List<List<Node>> SplitGraphByLayer(IReadOnlyList<Node> nodeGraph)
         {
             var layerCount = nodeGraph.Select(n => n.Layer).Distinct().Count();
-            var layers = new List<IReadOnlyList<Node>>(layerCount);
+            var layers = new List<List<Node>>(layerCount);
 
             for (var i = 0; i < layerCount; ++i)
             {
@@ -82,9 +89,68 @@ namespace GraphLayoutSample.Engine.Layout
             return offset;
         }
 
-        private static int GetCrossCount(IReadOnlyList<Node> firstLayer, IReadOnlyList<Node> secondLayer)
+        private static List<Tuple<int, int>> GetAllEdges(List<Node> firstLayer, List<Node> secondLayer)
         {
-            return 0;
+            var firstLayerCount = firstLayer.Count;
+            var edges = new List<Tuple<int, int>>();
+
+            for (var i = 0; i < firstLayerCount; ++i)
+            {
+                foreach (var node in firstLayer[i].NextNodes)
+                {
+                    var secondIndex = secondLayer.IndexOf(node);
+                    edges.Add(new Tuple<int, int>(i, secondIndex));
+                }
+            }
+
+            return edges;
+        }
+
+        private static bool EdgesIntersect(Tuple<int, int> firstEdge, Tuple<int, int> secondEdge)
+        {
+            return (firstEdge.Item1 < secondEdge.Item1 && firstEdge.Item2 > secondEdge.Item2)
+                || (firstEdge.Item1 > secondEdge.Item1 && firstEdge.Item2 < secondEdge.Item2);
+        }
+
+        private static int GetCrossCount(List<Node> firstLayer, List<Node> secondLayer)
+        {
+            var result = 0;
+
+            var edges = GetAllEdges(firstLayer, secondLayer);
+            var edgesCount = edges.Count;
+
+            for (var i = 0; i < edgesCount; ++i)
+            {
+                for (var j = i + 1; j < edgesCount; ++j)
+                {
+                    var firstEdge = edges[i];
+                    var secondEdge = edges[j];
+
+                    if (EdgesIntersect(firstEdge, secondEdge))
+                        result++;
+                }
+            }
+
+            return result;
+        }
+
+        private static IReadOnlyList<Node> GetBestPermutation(List<Node> firstLayer, List<Node> secondLayer)
+        {
+            var minCrossCount = int.MaxValue;
+            IReadOnlyList<Node> result = null;
+
+            foreach (var permutation in secondLayer.GetAllPermutations())
+            {
+                var enumeratedPermutation = permutation.ToList();
+                var crossCount = GetCrossCount(firstLayer, enumeratedPermutation);
+                if (crossCount < minCrossCount)
+                {
+                    minCrossCount = crossCount;
+                    result = enumeratedPermutation;
+                }
+            }
+
+            return result;
         }
 
         #endregion
