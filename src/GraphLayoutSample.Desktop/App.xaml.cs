@@ -19,7 +19,7 @@ namespace GraphLayoutSample.Desktop
     /// </summary>
     public partial class App : Application, IDisposable
     {
-        public static Window GetMainWindow() => Current.Windows.OfType<MainWindow>().First();
+        public static Window GetMainWindow() => Current.Windows.OfType<UI.Windows.MainWindow>().First();
 
         #region ui thread access
 
