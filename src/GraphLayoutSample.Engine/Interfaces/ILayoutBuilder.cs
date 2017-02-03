@@ -11,9 +11,8 @@ namespace GraphLayoutSample.Engine.Interfaces
         ///     Layout builder interface
         /// </summary>
         /// <param name="nodeGraph">Node graph to fit</param>
-        /// <param name="currentWidth">Current field width</param>
-        /// <param name="currentHeight">Current field height</param>
-        /// <returns>Preferred field width</returns>
-        double SetPositions(IReadOnlyList<Node> nodeGraph, double currentWidth, double currentHeight);
+        /// <param name="currectSize">Current field size</param>
+        /// <returns>Preferred field size</returns>
+        RectangleSize SetPositions(IReadOnlyList<Node> nodeGraph, RectangleSize currectSize);
     }
 }

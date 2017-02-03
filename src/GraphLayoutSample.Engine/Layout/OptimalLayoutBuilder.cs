@@ -7,10 +7,16 @@ namespace GraphLayoutSample.Engine.Layout
     public class OptimalLayoutBuilder : ILayoutBuilder
     {
         #region ILayoutBuilder
-        public double SetPositions(IReadOnlyList<Node> nodeGraph, double currentWidth, double currentHeight)
+        public RectangleSize SetPositions(IReadOnlyList<Node> nodeGraph, RectangleSize currentSize)
         {
-            return currentWidth;
+            return currentSize;
         }
+        #endregion
+
+        #region private
+
+        
+
         #endregion
     }
 }

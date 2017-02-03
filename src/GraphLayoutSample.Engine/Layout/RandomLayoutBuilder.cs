@@ -12,7 +12,7 @@ namespace GraphLayoutSample.Engine.Layout
     {
         #region ILayoutBuilder
 
-        public double SetPositions(IReadOnlyList<Node> nodeGraph, double currentWidth, double currentHeight)
+        public RectangleSize SetPositions(IReadOnlyList<Node> nodeGraph, RectangleSize currentSize)
         {
             var random = new Random();
             foreach (var node in nodeGraph)
@@ -22,7 +22,7 @@ namespace GraphLayoutSample.Engine.Layout
                 Logger.LogDebug("RANDOM LAY", $"node {node.Guid}: x = {node.Position.X}, y = {node.Position.Y}");
             }
 
-            return Width;
+            return currentSize;
         }
 
         #endregion
@@ -34,8 +34,8 @@ namespace GraphLayoutSample.Engine.Layout
             Margin = margin;
         }
 
-        public double Width { get; }
-        public double Height { get; }
-        public double Margin { get; }
+        private double Width { get; }
+        private double Height { get; }
+        private double Margin { get; }
     }
 }

@@ -95,7 +95,10 @@ namespace GraphLayoutSample.Desktop
             var graph = GraphHelper.GenerateRandomGraph(_settings);
 
             var layoutBuilder = new LayerLayoutBuilder();//RandomLayoutBuilder(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight, 10);
-            GraphCanvas.Width = layoutBuilder.SetPositions(graph, GraphCanvas.ActualWidth, GraphCanvas.ActualHeight);
+            var newSize = layoutBuilder.SetPositions(graph,
+                new RectangleSize(GraphCanvas.ActualWidth, GraphCanvas.ActualHeight));
+            GraphCanvas.Width = newSize.Width;
+            GraphCanvas.Height = newSize.Heigth;
 
             Draw(graph);
         }
