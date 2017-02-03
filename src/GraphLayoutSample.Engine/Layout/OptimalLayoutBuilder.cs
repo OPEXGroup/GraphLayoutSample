@@ -13,13 +13,40 @@ namespace GraphLayoutSample.Engine.Layout
         {
             const double margin = 25.0;
             var width = SetHorizontalPositions(nodeGraph, margin);
-            var layerCount = nodeGraph.Select(n => n.Layer).Distinct().Count();
+            var layers = SplitGraphByLayer(nodeGraph);
+            var layerCount = layers.Count;
 
             return currentSize;
         }
         #endregion
 
         #region private
+
+        private static List<IReadOnlyList<Node>> SplitGraphByLayer(IReadOnlyList<Node> nodeGraph)
+        {
+            var layerCount = nodeGraph.Select(n => n.Layer).Distinct().Count();
+            var layers = new List<IReadOnlyList<Node>>(layerCount);
+
+            for (var i = 0; i < layerCount; ++i)
+            {
+                layers.Add(nodeGraph.Where(n => n.Layer == i).ToList());
+            }
+
+            return layers;
+        }
+
+        private static double SetOrderedLayerVerticalPositions(IReadOnlyList<Node> layer, double margin)
+        {
+            var offset = margin;
+
+            foreach (var node in layer)
+            {
+                node.Position.Y = offset;
+                offset += node.Height + margin;
+            }
+
+            return offset;
+        }
 
         private static double SetHorizontalPositions(IReadOnlyList<Node> nodeGraph, double margin)
         {
