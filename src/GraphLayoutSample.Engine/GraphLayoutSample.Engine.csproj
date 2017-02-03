@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\NodeColor.cs" />
+    <Compile Include="Helpers\CombinatoricsHelper.cs" />
     <Compile Include="Helpers\GraphHelper.cs" />
     <Compile Include="Helpers\LayerHelper.cs" />
     <Compile Include="Interfaces\ILayoutBuilder.cs" />

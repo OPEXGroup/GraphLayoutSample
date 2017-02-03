@@ -126,8 +126,7 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
             var maxNodeDegree = graph.Max(n => n.Degree);
 
             Assert.AreEqual(settings.LayerCount, distinctLayersCount);
-            Assert.IsTrue(minNodeDegree >= settings.MinNodeDegree, $"{minNodeDegree} >= {settings.MinNodeDegree}");
-            Assert.IsTrue(maxNodeDegree <= settings.MaxNodeDegree, $"{maxNodeDegree} >= {settings.MaxNodeDegree}");
+            Assert.IsTrue(minNodeDegree >= settings.MinNodeDegree);
         }
     }
 }

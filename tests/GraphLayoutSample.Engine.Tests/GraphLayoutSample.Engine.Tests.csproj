@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Helpers\CombinatoricsHelperTests.cs" />
     <Compile Include="Helpers\GraphHelperTests.cs" />
     <Compile Include="Helpers\LayerHelperTests.cs" />
     <Compile Include="Initializer.cs" />
