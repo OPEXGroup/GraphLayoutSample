@@ -1,5 +1,7 @@
 ﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GraphLayoutSample.Engine.Models;
@@ -10,6 +12,9 @@ namespace GraphLayoutSample.Engine.Helpers
     {
         public static void SetLayers(List<Node> nodes)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
             if (!nodes.Any())
                 return;
 
@@ -43,7 +48,31 @@ namespace GraphLayoutSample.Engine.Helpers
 
         public static void SetCoLayers(List<Node> nodes)
         {
-            
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
+            if (!nodes.Any())
+                return;
+
+            if (GraphHelper.HasCycles(nodes))
+                throw new InvalidOperationException("Colayers are defined only for acyclic graphs");
+
+            var startNodes = nodes.Where(n => !nodes.Any(nn => nn.NextNodes.Contains(n))).ToList();
+            foreach (var node in startNodes)
+            {
+                node.CoLayer = 0;
+                SetSubtreeCoLayers(node);
+            }
+        }
+
+        private static void SetSubtreeCoLayers(Node startNode)
+        {
+            var baseCoLayer = startNode.CoLayer;
+            foreach (var nextNode in startNode.NextNodes)
+            {
+                nextNode.CoLayer = Math.Max(nextNode.CoLayer, baseCoLayer + 1);
+                SetSubtreeCoLayers(nextNode);
+            }
         }
 
         public static int GetLayerCount(this IEnumerable<Node> graph) => graph.Select(n => n.Layer).Distinct().Count();
