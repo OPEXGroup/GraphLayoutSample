@@ -41,6 +41,11 @@ namespace GraphLayoutSample.Engine.Helpers
             }
         }
 
+        public static void SetCoLayers(List<Node> nodes)
+        {
+            
+        }
+
         public static int GetLayerCount(this IEnumerable<Node> graph) => graph.Select(n => n.Layer).Distinct().Count();
     }
 }

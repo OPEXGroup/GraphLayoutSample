@@ -13,13 +13,13 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
     {
         [TestMethod]
         [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
-        public void LayerHelper_ThrowsOnNull() => LayerHelper.SetLayers(null);
+        public void SetLayers_ThrowsOnNull() => LayerHelper.SetLayers(null);
 
         [TestMethod]
-        public void LayerHelper_DoesNotThrowOnEmptyList() => LayerHelper.SetLayers(new List<Node>());
+        public void SetLayers_DoesNotThrowOnEmptyList() => LayerHelper.SetLayers(new List<Node>());
 
         [TestMethod]
-        public void LayerHelper_SetsLayersForChain()
+        public void SetLayers_SetsLayersForChain()
         {
             var chain = new List<Node>
             {
@@ -40,7 +40,7 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
         }
 
         [TestMethod]
-        public void LayerHelper_SetsLayersForRhombus()
+        public void SetLayers_SetsLayersForRhombus()
         {
             var rhombus = new List<Node>
             {
@@ -63,7 +63,7 @@ namespace GraphLayoutSample.Engine.Tests.Helpers
         }
 
         [TestMethod]
-        public void LayerHelper_SetsLayersForComplexGraph()
+        public void SetLayers_SetsLayersForComplexGraph()
         {
             var rhombus = new List<Node>
             {
