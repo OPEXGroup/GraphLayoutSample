@@ -33,12 +33,12 @@ namespace GraphLayoutSample.Engine.Layout
 
         private static List<List<Node>> SplitGraphByLayer(IReadOnlyList<Node> nodeGraph)
         {
-            var layerCount = nodeGraph.Select(n => n.Layer).Distinct().Count();
+            var layerCount = nodeGraph.Select(n => n.CoLayer).Distinct().Count();
             var layers = new List<List<Node>>(layerCount);
 
             for (var i = 0; i < layerCount; ++i)
             {
-                layers.Add(nodeGraph.Where(n => n.Layer == i).ToList());
+                layers.Add(nodeGraph.Where(n => n.CoLayer == i).ToList());
             }
 
             return layers;
@@ -61,10 +61,10 @@ namespace GraphLayoutSample.Engine.Layout
         {
             var offset = margin;
 
-            var layerCount = nodeGraph.Max(n => n.Layer) + 1;
+            var layerCount = nodeGraph.Max(n => n.CoLayer) + 1;
             for (var layer = 0; layer < layerCount; ++layer)
             {
-                var layerNodes = nodeGraph.Where(n => n.Layer == layer).ToList();
+                var layerNodes = nodeGraph.Where(n => n.CoLayer == layer).ToList();
 
                 foreach (var layerNode in layerNodes)
                 {

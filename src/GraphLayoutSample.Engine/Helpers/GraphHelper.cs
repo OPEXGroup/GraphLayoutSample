@@ -69,6 +69,7 @@ namespace GraphLayoutSample.Engine.Helpers
             SetPreviousNodes(graph);
             AdjustHeights(graph, settings);
             LayerHelper.SetLayers(graph);
+            LayerHelper.SetCoLayers(graph);
             PrintDebugInfo(graph);
 
             return graph;
