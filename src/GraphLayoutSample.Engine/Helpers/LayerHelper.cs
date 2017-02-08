@@ -39,18 +39,6 @@ namespace GraphLayoutSample.Engine.Helpers
 
                 currentLayer++;
             }
-
-            foreach (var node in nodes)
-            {
-                var prevNodes = nodes.Where(n => n.NextNodes.Contains(node)).ToList();
-                if (!prevNodes.Any())
-                {
-                    node.CoLayer = 0;
-                    continue;
-                }
-
-                node.CoLayer = prevNodes.Max(n => n.Layer) + 1;
-            }
         }
 
         public static int GetLayerCount(this IEnumerable<Node> graph) => graph.Select(n => n.Layer).Distinct().Count();

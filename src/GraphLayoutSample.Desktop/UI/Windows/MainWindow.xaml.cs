@@ -19,7 +19,13 @@ namespace GraphLayoutSample.Desktop.UI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly RandomGraphSettings _settings = new RandomGraphSettings();
+        private readonly RandomGraphSettings _settings = new RandomGraphSettings
+        {
+            MinNodeDegree = 1,
+            MaxNodeDegree = 1,
+            NodeCount = 10,
+            LayerCount = 5
+        };
 
         public MainWindow()
         {
@@ -28,7 +34,7 @@ namespace GraphLayoutSample.Desktop.UI.Windows
 
         private void Clean() => GraphCanvas.Children.Clear();
 
-        private void Draw(List<Node> graph)
+        private void Draw(IReadOnlyCollection<Node> graph)
         {
             Clean();
 
